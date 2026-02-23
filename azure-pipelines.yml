@@ -4,12 +4,12 @@
 # https://aka.ms/yaml
 
 trigger:
- branches:
-   include:
+  branches:
+    include:
      - main
      - feature/*
- paths:
-   include:
+  paths:
+    include:
      - dev
      - pipeline/*
 
@@ -19,7 +19,7 @@ stages:
   jobs:
   - job: tf_validate
     pool:
-     vmImage: ubuntu-latest
+      vmImage: ubuntu-latest
     steps:
     - task: TerraformInstaller@1
       inputs:
@@ -34,8 +34,40 @@ stages:
         backendAzureRmStorageAccountName: 'tfdevbackendsaraj'
         backendAzureRmContainerName: 'tfstate'
         backendAzureRmKey: 'dev.terraform.tfstate'
-    
-
+    - task: TerraformTaskV4@4
+      inputs:
+        provider: 'azurerm'
+        command: validate
+        workingDirectory: '$(System.DefaultWorkingDirectory)/dev'
+- stage: Dev_deploy
+  condition: succeeded()
+  jobs: terrafrom_apply_dev
+  pool:
+    vmImage: 'ubuntu-latest'
+  steps:
+  - task: TerraformInstaller@1
+    inputs:
+      terraformVersion: 'latest'
+  - task: TerraformTaskV4@4
+    inputs:
+      provider: 'azurerm'
+      command: 'init'
+      workingDirectory: '$(System.DefaultWorkingDirectory)/dev'
+      backendServiceArm: 'azure-arm-service-connection'
+      backendAzureRmOverrideSubscriptionID: '62ebc499-ffd9-4eaa-af6a-46364114c1ae'
+      backendAzureRmResourceGroupName: 'terraform-state-rg'
+      backendAzureRmStorageAccountName: 'terraform-state-rg'
+      backendAzureRmContainerName: 'tfstate'
+      backendAzureRmKey: 'dev.terraform.tfstate'
+  - task: TerraformTask@5
+    inputs:
+      provider: 'azurerm'
+      command: 'apply'
+      workingDirectory: '$(System.DefaultWorkingDirectory)/dev'
+      commandOptions: '--auto--approve'
+      environmentServiceNameAzureRM: 'azure-arm-service-connection'
+      environmentAzureRmOverrideSubscriptionID: '62ebc499-ffd9-4eaa-af6a-46364114c1ae'
+      environmentAzureRmUseIdTokenGeneration: true
 # pool:
 #   vmImage: ubuntu-latest
 
