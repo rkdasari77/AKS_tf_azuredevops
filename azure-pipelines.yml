@@ -57,7 +57,7 @@ stages:
         backendServiceArm: 'azure-arm-service-connection'
         backendAzureRmOverrideSubscriptionID: '62ebc499-ffd9-4eaa-af6a-46364114c1ae'
         backendAzureRmResourceGroupName: 'terraform-state-rg'
-        backendAzureRmStorageAccountName: 'terraform-state-rg'
+        backendAzureRmStorageAccountName: 'tfdevbackendsaraj'
         backendAzureRmContainerName: 'tfstate'
         backendAzureRmKey: 'dev.terraform.tfstate'
     - task: TerraformTask@5
@@ -65,7 +65,7 @@ stages:
         provider: 'azurerm'
         command: 'apply'
         workingDirectory: '$(System.DefaultWorkingDirectory)/dev'
-        commandOptions: '--auto--approve'
+        commandOptions: '-auto-approve'
         environmentServiceNameAzureRM: 'azure-arm-service-connection'
         environmentAzureRmOverrideSubscriptionID: '62ebc499-ffd9-4eaa-af6a-46364114c1ae'
         environmentAzureRmUseIdTokenGeneration: true
