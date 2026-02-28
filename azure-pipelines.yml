@@ -69,14 +69,3 @@ stages:
         environmentServiceNameAzureRM: 'azure-arm-service-connection'
         environmentAzureRmOverrideSubscriptionID: '62ebc499-ffd9-4eaa-af6a-46364114c1ae'
         environmentAzureRmUseIdTokenGeneration: true
-# pool:
-#   vmImage: ubuntu-latest
-
-# steps:
-# - script: echo Hello, world!
-#   displayName: 'Run a one-line script'
-
-# - script: |
-#     echo Add other tasks to build, test, and deploy your project.
-#     echo See https://aka.ms/yaml
-#   displayName: 'Run a multi-line script'
