@@ -45,7 +45,8 @@ resource "azurerm_kubernetes_cluster" "aks-cluster" {
   identity {
   type = "SystemAssigned"
   }
-    
+  oidc_issuer_enabled = true
+  # workload_identity_enabled = true 
 }
 
 
