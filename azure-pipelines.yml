@@ -15,32 +15,32 @@ trigger:
 
 
 stages:
-- stage: validate
-  jobs:
-  - job: tf_validate
-    pool:
-      vmImage: ubuntu-latest
-    steps:
-    - task: TerraformInstaller@1
-      inputs:
-        terraformVersion: 'latest'
-    - task: TerraformTaskV4@4
-      inputs:
-        provider: 'azurerm'
-        command: 'init'
-        workingDirectory: '$(System.DefaultWorkingDirectory)/dev'
-        backendServiceArm: 'azure-arm-service-connection'
-        backendAzureRmResourceGroupName: 'terraform-state-rg'
-        backendAzureRmStorageAccountName: 'tfdevbackendsaraj'
-        backendAzureRmContainerName: 'tfstate'
-        backendAzureRmKey: 'dev.terraform.tfstate'
-    - task: TerraformTaskV4@4
-      inputs:
-        provider: 'azurerm'
-        command: validate
-        workingDirectory: '$(System.DefaultWorkingDirectory)/dev'
+# - stage: validate
+#   jobs:
+#   - job: tf_validate
+#     pool:
+#       vmImage: ubuntu-latest
+#     steps:
+#     - task: TerraformInstaller@1
+#       inputs:
+#         terraformVersion: 'latest'
+#     - task: TerraformTaskV4@4
+#       inputs:
+#         provider: 'azurerm'
+#         command: 'init'
+#         workingDirectory: '$(System.DefaultWorkingDirectory)/dev'
+#         backendServiceArm: 'azure-arm-service-connection'
+#         backendAzureRmResourceGroupName: 'terraform-state-rg'
+#         backendAzureRmStorageAccountName: 'tfdevbackendsaraj'
+#         backendAzureRmContainerName: 'tfstate'
+#         backendAzureRmKey: 'dev.terraform.tfstate'
+#     - task: TerraformTaskV4@4
+#       inputs:
+#         provider: 'azurerm'
+#         command: validate
+#         workingDirectory: '$(System.DefaultWorkingDirectory)/dev'
 - stage: Dev_deploy
-  condition: succeeded()
+  # condition: succeeded()
   jobs:
   - job: terrafrom_apply_dev
     pool:
@@ -55,17 +55,15 @@ stages:
         command: 'init'
         workingDirectory: '$(System.DefaultWorkingDirectory)/dev'
         backendServiceArm: 'azure-arm-service-connection'
-        backendAzureRmOverrideSubscriptionID: '62ebc499-ffd9-4eaa-af6a-46364114c1ae'
+        # backendAzureRmOverrideSubscriptionID: '62ebc499-ffd9-4eaa-af6a-46364114c1ae'
         backendAzureRmResourceGroupName: 'terraform-state-rg'
         backendAzureRmStorageAccountName: 'tfdevbackendsaraj'
         backendAzureRmContainerName: 'tfstate'
         backendAzureRmKey: 'dev.terraform.tfstate'
-    - task: TerraformTask@5
+    - task: TerraformTaskV4@4
       inputs:
         provider: 'azurerm'
         command: 'apply'
         workingDirectory: '$(System.DefaultWorkingDirectory)/dev'
         commandOptions: '-auto-approve'
         environmentServiceNameAzureRM: 'azure-arm-service-connection'
-        environmentAzureRmOverrideSubscriptionID: '62ebc499-ffd9-4eaa-af6a-46364114c1ae'
-        environmentAzureRmUseIdTokenGeneration: true
