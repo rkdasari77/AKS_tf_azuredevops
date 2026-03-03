@@ -19,7 +19,7 @@ resource "azurerm_kubernetes_cluster" "aks-cluster" {
   
   default_node_pool {
     name       = var.node_pool_name
-    vm_size    = "Standard_DS2_v2"
+    vm_size    = "Standard_DC2ds_v3"
     zones   = [1, 2, 3]
     auto_scaling_enabled = true
     max_count            = 3
@@ -37,19 +37,15 @@ resource "azurerm_kubernetes_cluster" "aks-cluster" {
 # to do: generate the ssh keys using tls_private_key
 # upload the key to key vault
 
-  linux_profile {
-    admin_username = "ubuntu"
-    ssh_key {
-        key_data = trimspace(file(var.ssh_public_key))
-    }
-  }
 
   network_profile {
       network_plugin = "azure"
       load_balancer_sku = "standard"
   }
-
-    
+  identity {
+  type = "SystemAssigned"
   }
+    
+}
 
 
