@@ -1,6 +1,6 @@
 rgname                 = "dev-raj-rg"
 service_principal_name = "dev-raj-spn"
 keyvault_name          = "dev-raj-kv-101"
-SUB_ID = "62ebc499-ffd9-4eaa-af6a-46364114c1ae"
+SUB_ID = ""
 cluster_name = "dev-raj-cluster"
 node_pool_name = "devnp"
